@@ -10,7 +10,7 @@ You can install passpwnedcheck using pip, just run the following command in the 
 
 ## Usage
 
-    from passpwnedcheck import PassChecker
+    from passpwnedcheck.pass_checker import PassChecker
     
     pass_checker = PassChecker()
     
