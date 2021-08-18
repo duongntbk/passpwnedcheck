@@ -9,6 +9,7 @@ LINE_BREAK = '\r\n'
 DELIMITER = ':'
 URL = 'https://api.pwnedpasswords.com/range/'
 STATUS_CODE_OK = 200
+BATCH_SIZE = 10
 
 
 # Error messages for pass_checker.
@@ -18,7 +19,7 @@ RESPONSE_CODE_ERROR_MSG = 'Cannot check pwn site: '
 PASSWORD_COMPROMISED_MSG = 'Your password has been compromised {} time(s)'
 PASSWORD_NOT_COMPROMISED_MSG = 'Your password has not been compromised (yet)'
 INPUT_FORMAT_ERROR_MSG = 'Input parameter or response text from server was in wrong format'
-CONNECTION_ERROR_MSG = 'An error occurred while connecting to pwn server'
+CONNECTION_ERROR_MSG = 'An error occurred while connecting to pwn server: '
 UNKNOWN_ERROR_MSG = 'An unknown error occurred while checking password'
 
 # Help message for pass_checker.

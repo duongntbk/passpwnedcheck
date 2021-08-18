@@ -5,12 +5,12 @@ This module checks for password pwnage using k-anonimity.
 """
 
 import sys
-from hashlib import sha1
 
 import requests
 from requests.compat import urljoin
 
 import passpwnedcheck.constants as constants
+from passpwnedcheck.utils import get_password_prefix_suffix, response_to_dict
 
 
 class PassChecker:
@@ -37,11 +37,11 @@ class PassChecker:
         using pwnedpasswords API
         '''
 
-        prefix, suffix = self.get_password_prefix_suffix(password)
+        prefix, suffix = get_password_prefix_suffix(password)
         response = requests.get(urljoin(constants.URL, prefix))
         
         if response.status_code == constants.STATUS_CODE_OK:
-            response_dict = self.response_to_dict(response.text)
+            response_dict = response_to_dict(response.text)
 
             if suffix in response_dict:
                 return True, response_dict[suffix]
@@ -51,39 +51,6 @@ class PassChecker:
 
         else:
             raise ConnectionError(constants.RESPONSE_CODE_ERROR_MSG + response.reason)
-
-    def get_password_prefix_suffix(self, password):
-        '''
-        Calculate prefix and suffix for password.
-
-        Prefix: the first 5 characters of hashed value in hex
-        of password. This value will be sent to pwnedpasswords API.
-
-        Suffix: the rest of hashed value in hex of password.
-        This value won't be sent to API.
-        '''
-
-        if not isinstance(password, str):
-            raise TypeError(constants.PASSWORD_FORMAT_ERROR_MSG)
-
-        hash = sha1(password.encode('utf-8')).hexdigest()
-        return hash[:5].upper(), hash[5:].upper()
-
-    def response_to_dict(self, text):
-        '''
-        Convert response data from string to dictionary format.
-        '''
-
-        if not isinstance(text, str):
-            raise TypeError(constants.RESPONSE_FORMAT_ERROR_MSG)
-
-        if not text:
-            return {}
-
-        # Create dictionary using dictionary comprehesion.
-        return {row.split(constants.DELIMITER)[0]: int(row.split(constants.DELIMITER)[-1]) \
-                    for row in text.split(constants.LINE_BREAK)}
-
 
 def main():
     '''
