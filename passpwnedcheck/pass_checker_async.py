@@ -31,17 +31,18 @@ class PassCheckerAsync:
         rs = {}
 
         batch_generator = self._batch_generator(passwords, batch_size)
-        for batch in batch_generator:
+        for password_batch in batch_generator:
             tasks = []
 
-            for password in batch:
+            for password in password_batch:
                 task_run = self.is_password_compromised(password)
                 task = asyncio.ensure_future(task_run)
                 tasks.append(task)
 
             batch_results = await asyncio.gather(*tasks)
 
-            for password, count in batch_results:
+            for password, results in zip(password_batch, batch_results):
+                _, count = results
                 rs[password] = count
 
         return rs
@@ -59,9 +60,9 @@ class PassCheckerAsync:
             response_dict = response_to_dict(response_text)
 
             if suffix in response_dict:
-                return password, response_dict[suffix]
+                return True, response_dict[suffix]
             else:
-                return password, 0
+                return False, 0
 
     def _batch_generator(self, collection, batch_size):
         '''
