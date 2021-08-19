@@ -1,12 +1,14 @@
 from setuptools import setup
 
 requires = [
-    'requests>=2.19.1'
+    'requests>=2.19.1',
+    'aiohttp>=3.7.4'
 ]
 
 test_requirements = [
-    'pytest-mock',
-    'pytest>=3.7.1'
+    'pytest-mock>=3.5.1',
+    'pytest>=6.2.2',
+    'pytest-asyncio>=0.14.0'
 ]
 
 with open('README.md', 'r') as fh:
@@ -14,7 +16,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='passpwnedcheck',
-    version='1.0.1',
+    version='2.0.0',
     description='Test for pwned password',
     author='Nguyen Thai Duong',
     author_email='duongnt.bk@gmail.com',

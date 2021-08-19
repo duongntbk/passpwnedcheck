@@ -23,7 +23,10 @@ async def test_is_password_compromised():
         '00FE7CEA0FC49CD44FFFE221B4E288E792D:1\r\n01C91CC3B2BB8575CB715776DE723EF2A25:8\r\n0246B0E85B76A83FCFDEFFE404046231CD9:2\r\n024C755EAE375140CC7F5736766A93018FD:3'
     ]
 
-    results = [1, 0]
+    results = [
+        (True, 1),
+        (False, 0)
+    ]
     pass_to_check = 'dummypassword'
 
     for response_text, result in zip(response_texts, results):
@@ -34,11 +37,10 @@ async def test_is_password_compromised():
         pc = PassCheckerAsync(session)
 
         # Act
-        pass_checked, compromised_count = await pc.is_password_compromised(pass_to_check)
+        actual_results = await pc.is_password_compromised(pass_to_check)
 
         # Assert
-        assert pass_checked == pass_to_check
-        assert compromised_count == result
+        assert actual_results == result
 
 @pytest.mark.asyncio
 async def test_is_password_compromised_error():
